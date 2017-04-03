@@ -10,9 +10,9 @@ var Type59sController = function(){
     });
     Object.defineProperty(o, 'create',{
       value: function newType59(id,type){
-        if(!id)throw new Error('Cannot create new Type59 with id '+id);
-        if(!type)throw new Error('Cannot create new Type59 with type '+type);
-        if(id in _instances)throw new Error('Type59 instance exists with of id '+id);
+        //if(!id)throw new Error('Cannot create new Type59 with id '+id);
+        //if(!type)throw new Error('Cannot create new Type59 with type '+type);
+        //if(id in _instances)throw new Error('Type59 instance exists with of id '+id);
         var type59 = Object.create(Type59(id,type));
         _instances[id] = type59;
         return type59;
@@ -36,12 +36,12 @@ var Type59sController = function(){
 };
 var z = Type59sController().getInstance();
 
-var Type59 = function Type59(id, type){
+var Type59 = function Type59(id, type, container, def){
   var _state = {
-        id: 'elem',
-        type: 'type59',
-        container: '.content_inner',
-        def: {}
+        id: id || 'elem',
+        type: type || 'type59',
+        container: container || '.content_inner',
+        def: def || {}
       },
 
   o = {};
@@ -105,7 +105,7 @@ var Qof = function Qof(id, def){
    f: {val:'', type:'cke'}
   };
 
-  qof =  Object.create(Type59());
+  qof =  z.create(id, 'qof', null, def);//Object.create(Type59());
   qof.id = id;
   qof.type = 'qof';
 
