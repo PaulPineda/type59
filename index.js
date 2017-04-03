@@ -1,45 +1,38 @@
 var Type59 = function testProto(){
-  var _id = 'elem',
-      _type = 'type59',
-      _container = '.content_inner',
-      _def = {},
-      _state = {
-        id: _id,
-        type: _type,
-        container: _container,
-        def: _def
+  var _state = {
+        id: 'elem',
+        type: 'type59',
+        container: '.content_inner',
+        def: {}
       },
 
   o = {};
 
 
-  Object.defineProperty(o, 'id', {
-    get: function(){ return _state.id; },
-    set: function(val){
-      if(typeof val === 'string'){
-        _state =  Object.assign(_state, {id: val});
-      }
-    },
-    enumerable: true
-  });
+  function defineStatePropOnO(key){
+    return {
+      get: function(){ return _state[key]; },
+      set: function(val){
+        if(typeof val === 'string'){
+          // dynamic object props don't work in IE yet
+          // _state =  Object.assign(_state, {[key]: val});
+          // so:
+          _state = Object.assign(_state, {}[key] = val);
+        }
+      },
+      enumerable: true
+    }
+  }
+  defineStatePropOnO('id');
+  defineStatePropOnO('type');
+  defineStatePropOnO('.container');
 
-  Object.defineProperty(o, 'type', {
-    get: function(){ return _state.type; },
-    set: function(val){
-      if(typeof val === 'string'){
-        _state =  Object.assign(_state, {type: val});
-      }
-    },
-    enumerable: true
-  });
-
-  Object.defineProperty(o, 'state', {
+  Object.defineProperty(o, 'content', {
     get: function(){ return _state.def; },
-
     enumerable: true
   });
 
-  Object.defineProperty(o, 'setState', {
+  Object.defineProperty(o, 'setContent', {
     value: function(val){
       if(Object.prototype.toString.call(val) === '[object Object]'){
         var newDef = Object.assign(_state.def, val);
