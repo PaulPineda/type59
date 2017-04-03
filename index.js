@@ -1,4 +1,42 @@
-var Type59 = function testProto(){
+var Type59sController = function(){
+  var instance;
+  function init(){
+    var _instances = {},
+    o = {}
+
+    Object.defineProperty(o, 'instances',{
+      get: function getInstances(){ return _instances; },
+      enumerable: true
+    });
+    Object.defineProperty(o, 'create',{
+      value: function newType59(id,type){
+        if(!id)throw new Error('Cannot create new Type59 with id '+id);
+        if(!type)throw new Error('Cannot create new Type59 with type '+type);
+        if(id in _instances)throw new Error('Type59 instance exists with of id '+id);
+        var type59 = Object.create(Type59(id,type));
+        _instances[id] = type59;
+        return type59;
+      }
+    });
+    Object.defineProperty(o, 'remove', {
+      value: function removeInstance(id){
+        delete _instances[id];
+      }
+    })
+    return o;
+  }
+  return {
+    getInstance: function(){
+      if(!instance)
+        instance = init();
+
+      return instance;
+    }
+  };
+};
+var z = Type59sController().getInstance();
+
+var Type59 = function Type59(id, type){
   var _state = {
         id: 'elem',
         type: 'type59',
@@ -10,22 +48,23 @@ var Type59 = function testProto(){
 
 
   function defineStatePropOnO(key){
-    return {
+    return Object.defineProperty(o, key, {
       get: function(){ return _state[key]; },
       set: function(val){
         if(typeof val === 'string'){
           // dynamic object props don't work in IE yet
           // _state =  Object.assign(_state, {[key]: val});
           // so:
-          _state = Object.assign(_state, {}[key] = val);
+          var newVal = {}
+          newVal[key] = val;
+          _state = Object.assign(_state, newVal);
         }
-      },
-      enumerable: true
-    }
+      }
+    });
   }
   defineStatePropOnO('id');
   defineStatePropOnO('type');
-  defineStatePropOnO('.container');
+  defineStatePropOnO('container');
 
   Object.defineProperty(o, 'content', {
     get: function(){ return _state.def; },
@@ -37,7 +76,7 @@ var Type59 = function testProto(){
       if(Object.prototype.toString.call(val) === '[object Object]'){
         var newDef = Object.assign(_state.def, val);
         _state =  Object.assign(_state, {def: newDef});
-        return _state;
+        return _state.def;
       }
       throw new Error('Cannot set state value of '+val)
     },
@@ -68,15 +107,17 @@ var Qof = function Qof(id, def){
 
   qof =  Object.create(Type59());
   qof.id = id;
+  qof.type = 'qof';
 
-  // defined QOF defintion Object
+  // define QOF defintion Object (should pull from qofMeta)
   def = def || {
     q: '',
     o: [],
     f: ''
   };
+  qof.setContent(def);
 
-  return Object.assign(qof, def);
+  return qof;
 }
 
 var Mcq = function Mcq(id, def){
@@ -86,8 +127,9 @@ var Mcq = function Mcq(id, def){
 
   def = def || {};
 
-  mcq =  Object.assign(Qof(id), {content:def});
+  mcq = Qof(id, def);
   mcq.id = id;
+  mcq.type = 'mcq';
 
-  return Object.assign(mcq, def);
+  return mcq;
 }
