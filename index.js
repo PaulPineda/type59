@@ -46,22 +46,48 @@ var Type59 = function testProto(){
 
 
   return o;
+};
+
+
+var Qof = function Qof(id, def){
+  var qofMeta, qof;
+
+  if(!id)throw new Error('Cannot create QOF with id of ' + id);
+
+  qofMeta = {
+   q: {val:'', type:'cke'},
+   o: {val:[], type:{
+        content: {val:'', type:'cke'},
+        correct: {val:[], type:'selector', options:[
+          {label:'False', value:false},
+          {label:'True', value:true}
+        ]}
+      }},
+   f: {val:'', type:'cke'}
+  };
+
+  qof =  Object.create(Type59());
+  qof.id = id;
+
+  // defined QOF defintion Object
+  def = def || {
+    q: '',
+    o: [],
+    f: ''
+  };
+
+  return Object.assign(qof, def);
 }
 
-var MCQ = function MCQ(id, def){
+var Mcq = function Mcq(id, def){
   var mcq;
 
   if(!id)throw new Error('Cannot create MCQ with id of ' + id);
 
-  def = def || {
+  def = def || {};
 
-  };
-
-  mcq =  Object.create(Type59());
+  mcq =  Object.assign(Qof(id), {content:def});
   mcq.id = id;
-  return mcq;
-}
 
-var t = MCQ('T');
-t.state = {newPropT:'some new val'}
-var q = MCQ('Q');
+  return Object.assign(mcq, def);
+}
