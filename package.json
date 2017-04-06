@@ -4,5 +4,12 @@
   "main": "index.js",
   "repository": {},
   "author": "paul@pineda.codes",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "^2.3.3",
+    "webpack-dev-server": "2"
+  },
+  "scripts":{
+    "test": "webpack-dev-server"
+  }
 }

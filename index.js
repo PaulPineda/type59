@@ -1,4 +1,4 @@
-var Type59sController = function(){
+var Type59s = function(){
   var instance;
   function init(){
     var _instances = {},
@@ -34,19 +34,23 @@ var Type59sController = function(){
     }
   };
 };
-var z = Type59sController().getInstance();
 
-var Type59 = function Type59(id, type, container, def){
+
+
+
+var Type59Proto = function Type59Proto(state){
   var _state = {
-        id: id || 'elem',
-        type: type || 'type59',
-        container: container || '.content_inner',
-        def: def || {}
+        id: 'elem',
+        type: 'type59',
+        container: '.content_inner',
+        def: {}
       },
-
   o = {};
-
-
+  _state = set_state(state);
+  
+  function set_state(newState){
+    return Object.assign({}, _state, state);
+  }
   function defineStatePropOnO(key){
     return Object.defineProperty(o, key, {
       get: function(){ return _state[key]; },
@@ -83,9 +87,12 @@ var Type59 = function Type59(id, type, container, def){
     enumerable: false
   });
 
-
   return o;
-};
+},
+Type59 = function Type59(){
+  return Object.create(Type59Proto)
+}
+
 
 
 var Qof = function Qof(id, def){
@@ -118,7 +125,7 @@ var Qof = function Qof(id, def){
   qof.setContent(def);
 
   return qof;
-}
+};
 
 var Mcq = function Mcq(id, def){
   var mcq;
@@ -128,8 +135,41 @@ var Mcq = function Mcq(id, def){
   def = def || {};
 
   mcq = Qof(id, def);
-  mcq.id = id;
   mcq.type = 'mcq';
 
   return mcq;
-}
+};
+
+var z = Type59s().getInstance(),
+  t = Type59s(),
+  q = Qof('QWOFFFFEEE'),
+  m = Mcq('MCQNAAAB'),
+  instanceMap = Object.keys(z.instances).map(function(key){
+    return z.instances[key];
+  })
+
+document.addEventListener('DOMContentLoaded', function(){
+  domLoaded();
+})
+function domLoaded(){
+  instanceMap.forEach(function(instance){
+    var ci = document.querySelector('.content_inner'),
+      div = document.createElement('div'),
+      h2 = document.createElement('h1'),
+      p = document.createElement('p'),
+      b = document.createElement('button');
+    h2.textContent = instance.id;
+    p.textContent = instance.type;
+    b.setAttribute('data-id', instance.id);
+    b.textContent = 'Edit';
+
+    b.addEventListener('click', function(e){
+      console.log(this.getAttribute('data-id'), z.instances[this.getAttribute('data-id')]);
+    });
+
+    div.appendChild(h2);
+    div.appendChild(p);
+    div.appendChild(b);
+    ci.appendChild(div);
+  });
+};
