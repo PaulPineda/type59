@@ -1,40 +1,69 @@
-var Type59s = function(){
-  var instance;
-  function init(){
-    var _instances = {},
-    o = {}
+// Type59s module (singelton):
+// - create Type59 instances
+// - store reference to these instances in an object where instance id is key
+(function (exports){
+  function Type59s(){
+    var instance;
+    function init(){
+      var _instances = {},
+      o = {}
 
-    Object.defineProperty(o, 'instances',{
-      get: function getInstances(){ return _instances; },
-      enumerable: true
-    });
-    Object.defineProperty(o, 'create',{
-      value: function newType59(id,type){
-        //if(!id)throw new Error('Cannot create new Type59 with id '+id);
-        //if(!type)throw new Error('Cannot create new Type59 with type '+type);
-        //if(id in _instances)throw new Error('Type59 instance exists with of id '+id);
-        var type59 = Object.create(Type59(id,type));
-        _instances[id] = type59;
-        return type59;
-      }
-    });
-    Object.defineProperty(o, 'remove', {
-      value: function removeInstance(id){
-        delete _instances[id];
-      }
-    })
-    return o;
-  }
-  return {
-    getInstance: function(){
-      if(!instance)
-        instance = init();
-
-      return instance;
+      Object.defineProperty(o, 'instances',{
+        get: function getInstances(){ return _instances; },
+        enumerable: true
+      });
+      Object.defineProperty(o, 'create',{
+        value: function newType59(id,type){
+          var type59 = Object.create(Type59(id,type));
+          _instances[id] = type59;
+          return type59;
+        }
+      });
+      Object.defineProperty(o, 'remove', {
+        value: function removeInstance(id){
+          delete _instances[id];
+        }
+      })
+      return o;
     }
-  };
-};
+    return {
+      getInstance: function(){
+        if(!instance)
+          instance = init();
 
+        return instance;
+      }
+    };
+  }
+  exports.Type59s = Type59s().getInstance();
+}((typeof exports === 'undefined') ? window : exports));
+
+// Form Handler
+(function(exports){
+  function InputGenerator(exports){
+    var instance;
+
+    function init(){
+      var _content,
+        o = {};
+
+      function setActiveElement(elem){};
+      function createInputType(type){};
+
+      return o;
+    };
+
+    return {
+      getInstance: function(){
+        if(!instance)
+          instance = init();
+
+        return instance;
+      }
+    };
+  }
+  exports.InputGenerator = InputGenerator().getInstance();
+}((typeof exports === 'undefined') ? window : exports));
 
 
 
@@ -47,7 +76,7 @@ var Type59Proto = function Type59Proto(state){
       },
   o = {};
   _state = set_state(state);
-  
+
   function set_state(newState){
     return Object.assign({}, _state, state);
   }
@@ -90,7 +119,7 @@ var Type59Proto = function Type59Proto(state){
   return o;
 },
 Type59 = function Type59(){
-  return Object.create(Type59Proto)
+  return Object.create(Type59Proto());
 }
 
 
@@ -127,6 +156,26 @@ var Qof = function Qof(id, def){
   return qof;
 };
 
+// (function(exports){
+//   (function(exports){
+//     function Mcq(id, def){
+//       var mcq;
+//
+//       if(!id)throw new Error('Cannot create MCQ with id of ' + id);
+//
+//       def = def || {};
+//
+//       mcq = Qof(id);
+//       mcq.type = 'mcq';
+//       mcq.setContent(def);
+//
+//       return mcq;
+//     }
+//     exports.types.Mcq = Mcq;
+//   }(typeof exports === 'undefined' ? window : exports));
+// })(Type59s);
+
+
 var Mcq = function Mcq(id, def){
   var mcq;
 
@@ -134,14 +183,14 @@ var Mcq = function Mcq(id, def){
 
   def = def || {};
 
-  mcq = Qof(id, def);
+  mcq = Qof(id);
   mcq.type = 'mcq';
+  mcq.setContent(def);
 
   return mcq;
 };
 
-var z = Type59s().getInstance(),
-  t = Type59s(),
+var z = Type59s,
   q = Qof('QWOFFFFEEE'),
   m = Mcq('MCQNAAAB'),
   instanceMap = Object.keys(z.instances).map(function(key){
